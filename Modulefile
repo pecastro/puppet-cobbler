@@ -8,4 +8,4 @@ description 'Module for Cobbler configuration'
 project_page 'https://bitbucket.org/jsosic/puppet-cobbler'
 
 ## Add dependencies, if any:
-dependency 'puppetlabs/apache', '>= 0.5.0'
+# dependency 'puppetlabs/apache', '>= 0.5.0'
