@@ -34,6 +34,7 @@ download link of ISO image and distro name:
     cobbler::add_distro { 'CentOS-6.3-x86_64':
       arch    => 'x86_64',
       isolink => 'http://mi.mirror.garr.it/mirrors/CentOS/6.3/isos/x86_64/CentOS-6.3-x86_64-bin-DVD1.iso',
+      tmpdir  => '/var/tmp',
     }
 
 If you want to use 'cobbler import', you can add a distro other way:

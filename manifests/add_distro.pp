@@ -5,6 +5,7 @@
 define cobbler::add_distro (
   $arch,
   $isolink,
+  $tmpdir            = '/tmp',
   $kernel            = 'images/pxeboot/vmlinuz',
   $initrd            = 'images/pxeboot/initrd.img',
   $ks_template       = "cobbler/${title}.ks.erb",
@@ -18,6 +19,7 @@ define cobbler::add_distro (
     ensure  => present,
     arch    => $arch,
     isolink => $isolink,
+    tmpdir  => $tmpdir,
     destdir => $::cobbler::distro_path,
     kernel  => "${::cobbler::distro_path}/${distro}/${kernel}",
     initrd  => "${::cobbler::distro_path}/${distro}/${initrd}",

@@ -22,7 +22,7 @@ If, on the other hand, you want to use 'import', distro would look like:
   }
 
 This rule would ensure that the kernel swappiness setting be set to '20'"
- 
+
   desc 'The cobbler distro type'
 
   ensurable
@@ -42,6 +42,15 @@ This rule would ensure that the kernel swappiness setting be set to '20'"
     validate do |value|
       if value
         raise ArgumentError, "%s is not a valid link to ISO image." % value unless value =~ /^https?:\/\/.*iso/
+      end
+    end
+  end
+
+  newparam(:tmpdir) do
+    desc 'Download directoryfor the ISO image.'
+    validate do |value|
+      if value
+        raise ArgumentError, "%s is not a valid link to ISO image." % value unless File.directory? value
       end
     end
   end
@@ -120,7 +129,7 @@ This rule would ensure that the kernel swappiness setting be set to '20'"
     def is_to_s(currentvalue)
       currentvalue.inspect
     end
-  end 
+  end
 
   newproperty(:comment) do
     desc 'Human readable description of distribution.'
