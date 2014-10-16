@@ -11,6 +11,7 @@ Puppet::Type.type(:cobblerprofile).provide(:profile) do
     keys = []
     # connect to cobbler server on localhost
     cobblerserver = XMLRPC::Client.new2('http://127.0.0.1/cobbler_api')
+    cobblerserver.http_header_extra = {"accept-encoding" => "identity"}
     # make the query (get all systems)
     xmlrpcresult = cobblerserver.call('get_profiles')
 

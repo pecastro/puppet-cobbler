@@ -11,6 +11,7 @@ Puppet::Type.type(:cobblersystem).provide(:system) do
     keys = []
     # connect to cobbler server on localhost
     cobblerserver = XMLRPC::Client.new2('http://127.0.0.1/cobbler_api')
+    cobblerserver.http_header_extra = {"accept-encoding" => "identity"}
     # make the query (get all systems)
     xmlrpcresult = cobblerserver.call('get_systems')
 
@@ -95,6 +96,7 @@ Puppet::Type.type(:cobblersystem).provide(:system) do
 
     # connect to cobbler server on localhost
     cobblerserver = XMLRPC::Client.new2('http://127.0.0.1/cobbler_api')
+    cobblerserver.http_header_extra = {"accept-encoding" => "identity"}
     # make the query (get all systems)
     xmlrpcresult = cobblerserver.call('get_systems')
     # get properties of current system to variable

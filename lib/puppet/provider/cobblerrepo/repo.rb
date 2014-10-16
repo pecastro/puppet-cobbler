@@ -11,6 +11,7 @@ Puppet::Type.type(:cobblerrepo).provide(:repo) do
     keys = []
     # connect to cobbler server on localhost
     cobblerserver = XMLRPC::Client.new2('http://127.0.0.1/cobbler_api')
+    cobblerserver.http_header_extra = {"accept-encoding" => "identity"}
     # make the query (get all systems)
     xmlrpcresult = cobblerserver.call('get_repos')
 
@@ -80,23 +81,23 @@ Puppet::Type.type(:cobblerrepo).provide(:repo) do
 
   def create
     # sanity check
-    raise ArgumentError, 'mirror of the repository must be specified!' if @resource[:mirror].nil? 
-    
+    raise ArgumentError, 'mirror of the repository must be specified!' if @resource[:mirror].nil?
+
     # create cobblerargs variable
     cobblerargs = 'repo add --name=' + @resource[:name] + ' --mirror=' + @resource[:mirror] + ' --mirror-locally=' + @resource[:mirror_locally].to_s
-    
+
     # turn string into array
     cobblerargs = cobblerargs.split(' ')
 
     # run cobbler commands
     cobbler(cobblerargs)
-    
+
     # add properties
     self.arch           = @resource.should(:arch)           unless @resource[:arch].nil?           or self.arch           == @resource.should(:arch)
     self.mirror_locally = @resource.should(:mirror_locally) unless @resource[:mirror_locally].nil? or self.mirror_locally == @resource.should(:mirror_locally)
     self.keep_updated   = @resource.should(:keep_updated)   unless @resource[:keep_updated].nil?   or self.keep_updated   == @resource.should(:keep_updated)
     self.comment        = @resource.should(:comment)        unless @resource[:comment].nil?        or self.comment        == @resource.should(:comment)
-    
+
     # final sync
     cobbler('reposync')
     @property_hash[:ensure] = :present
@@ -107,7 +108,7 @@ Puppet::Type.type(:cobblerrepo).provide(:repo) do
     cobbler('reposync')
     @property_hash[:ensure] = :absent
   end
-  
+
   def exists?
     @property_hash[:ensure] == :present
   end
