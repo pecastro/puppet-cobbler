@@ -10,6 +10,7 @@ class cobbler::dhcp (
   $service         = $::cobbler::params::dhcp_service,
   $nameservers     = $::cobbler::params::nameservers,
   $interfaces      = $::cobbler::params::dhcp_interfaces,
+  $router        = $::cobbler::params::dhcp_router,
   $subnets         = undef,
   $dynamic_range   = $::cobbler::params::dhcp_dynamic_range,
 ) inherits cobbler::params {

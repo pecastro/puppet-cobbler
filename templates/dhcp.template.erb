@@ -18,6 +18,7 @@ allow bootp;
 ignore client-updates;
 set vendorclass = option vendor-class-identifier;
 
+
 <% unless @dhcp_interfaces == '' or @dhcp_interfaces.nil? -%>
 <% @dhcp_interfaces.each do |iface| -%>
 subnet <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.0 netmask 255.255.255.0 {
@@ -31,7 +32,11 @@ elsif (@nameservers.kind_of?(String) && @nameservers != '' )
 else
    puts("127.0.0.1")
 end %>;
-    option routers              <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.1;
+<% if !@router.nil? -%>
+    option routers              <%= @router %>;
+<% else -%>
+   option routers               <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.1
+<% end -%>
     filename                    "/pxelinux.0";<% if @dhcp_dynamic_range == 1 then %>
     range dynamic-bootp         <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.100 <%= instance_variable_get("@ipaddress_#{iface}").match(/\d+\.\d+\.\d+/) %>.200;<% end %>
     default-lease-time          21600;
@@ -54,7 +59,11 @@ elsif (@nameservers.kind_of?(String) && @nameservers != '' )
 else
    puts("127.0.0.1")
 end %>;
+<% if !@router.nil? -%>
+    option routers              <%= @router %>;
+<% else -%>
     option routers              <%= dhcp_subnet_split[0].match(/\d+\.\d+\.\d+/) %>.<%= dhcp_subnet_split[0].sub(/\d+\.\d+\.\d+\./, '').to_i + 1 %>;
+<% end -%>
     filename                    "/pxelinux.0";
     default-lease-time          21600;
     max-lease-time              43200;
@@ -95,4 +104,3 @@ group {
         #end for
 }
 #end for
-
